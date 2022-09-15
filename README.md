@@ -43,7 +43,7 @@ Users should be able to:
 ### Built with
 
 - [React](https://reactjs.org/) - JS library
-- [Vite](https://nextjs.org/) - React framework
+- [Vite](https://vitejs.dev/)
 - [Tailwindcss](https://tailwindcss.com/) - For styles
 - [Styled Components](https://styled-components.com/) - I used it particulary to style the input rage
 - Flexbox
