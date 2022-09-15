@@ -5,14 +5,66 @@ const availableStrengths: StrengthType[] = [0, 1, 2, 3, 4];
 type StrengthProps = {
   strength: StrengthType;
   setStrength: React.Dispatch<React.SetStateAction<StrengthType>>;
+  setCharacterLength: React.Dispatch<React.SetStateAction<number>>;
+  setOptions: React.Dispatch<
+    React.SetStateAction<{
+      upperCase: boolean;
+      lowerCase: boolean;
+      numbers: boolean;
+      symbols: boolean;
+    }>
+  >;
 };
-function Strength({ strength, setStrength }: StrengthProps) {
+function Strength({
+  strength,
+  setStrength,
+  setCharacterLength,
+  setOptions,
+}: StrengthProps) {
   const [tempStrength, setTempStrength] = useState<StrengthType>(strength);
   useEffect(() => {
     setTempStrength(strength);
   }, [strength]);
+  const handleOnClick = (level: StrengthType) => {
+    if (level === 1) {
+      setCharacterLength(30);
+      setOptions({
+        lowerCase: true,
+        numbers: true,
+        symbols: false,
+        upperCase: false,
+      });
+    }
+    if (level === 2) {
+      setCharacterLength(40);
+      setOptions({
+        lowerCase: true,
+        numbers: true,
+        symbols: false,
+        upperCase: false,
+      });
+    }
+    if (level === 3) {
+      setCharacterLength(40);
+      setOptions({
+        lowerCase: true,
+        numbers: true,
+        symbols: true,
+        upperCase: true,
+      });
+    } // 10 --- 50 / 12 --- x
+    if (level === 4) {
+      setCharacterLength(60);
+      setOptions({
+        lowerCase: true,
+        numbers: true,
+        symbols: true,
+        upperCase: true,
+      });
+    }
+  };
   return (
-    <div className='bg-[#18171F]  w-[30rem] h-[4.5rem] flex justify-between items-center px-8 py-[1.5rem] my-[2rem]'>
+    <div className='bg-[#18171F]  md:w-[29.75rem] w-[19.43rem] h-[4rem] md:h-[4.5rem] flex justify-between items-center px-[1rem] py-[1rem] md:px-8 md:py-[1.5rem] my-[2rem]'>
       <div className='text-[#817D92] text-[1.125rem] leading-[1.485rem] uppercase'>
         Strength
       </div>
@@ -25,7 +77,7 @@ function Strength({ strength, setStrength }: StrengthProps) {
             return (
               <button
                 key={level}
-                onClick={() => setStrength(level)}
+                onClick={() => handleOnClick(level)}
                 onMouseEnter={() => setTempStrength(level)}
                 onMouseLeave={() => setTempStrength(strength)}
               >

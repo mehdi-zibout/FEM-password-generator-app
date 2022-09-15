@@ -6,6 +6,7 @@ import Strength from './components/Strength';
 import { StrengthType } from './components/Strength';
 import { Range, Container } from './styles';
 import generatePassword from './utils';
+import { measureStrength } from './utils';
 type optionText = {
   type: 'upperCase' | 'lowerCase' | 'numbers' | 'symbols';
   title: string;
@@ -33,52 +34,7 @@ function App() {
 
   useEffect(() => {
     const charLength = Math.floor(characterLength / 5);
-    if (
-      !options.numbers &&
-      !options.symbols &&
-      !options.lowerCase &&
-      !options.upperCase
-    ) {
-      setStrength(0);
-      return;
-    }
-    if (
-      charLength < 8 ||
-      (!options.numbers && !options.symbols && !options.lowerCase) ||
-      (!options.numbers && !options.symbols && !options.upperCase) ||
-      (!options.upperCase && !options.symbols && !options.lowerCase)
-    ) {
-      setStrength(1);
-      return;
-    }
-    if (
-      (!options.numbers && !options.symbols) ||
-      (!options.symbols && !options.upperCase) ||
-      (!options.symbols && !options.lowerCase) ||
-      (options.upperCase &&
-        options.lowerCase &&
-        options.numbers &&
-        charLength < 10) ||
-      (!options.numbers && !options.upperCase && !options.lowerCase)
-    ) {
-      setStrength(2);
-      return;
-    }
-    if (!options.symbols) {
-      setStrength(3);
-      return;
-    }
-    if (
-      options.upperCase &&
-      options.lowerCase &&
-      options.numbers &&
-      options.symbols &&
-      charLength > 9
-    ) {
-      setStrength(4);
-      return;
-    }
-    setStrength(3);
+    setStrength(measureStrength(charLength, options));
   }, [options, characterLength]);
 
   useEffect(
@@ -117,7 +73,7 @@ function App() {
         setShowCopied={setShowCopied}
         showCopied={showCopied}
       />
-      <Container>
+      <Container className='md:w-[33.75rem]  w-[21.43rem] px-[1rem] py-[1rem] md:py-[1.18rem] md:px-[2rem] '>
         <div className='flex justify-between items-center mb-[1.56rem]'>
           <div className='text-[1.125rem]'>Character Length</div>
           <div className='text-[#A4FFAF] text-[2rem]'>
@@ -127,7 +83,7 @@ function App() {
         <Range
           value={characterLength}
           onChange={(e) => setCharacterLength(+e.target.value)}
-          className='mb-[2.62rem]'
+          className='mb-[2.62rem] md:w-[29.75rem] w-[19.43rem]          '
         />
         <ul className=''>
           {optionsText.map((option) => (
@@ -148,14 +104,14 @@ function App() {
             </li>
           ))}
         </ul>
-        <Strength strength={strength} setStrength={setStrength} />
+        <Strength
+          strength={strength}
+          setStrength={setStrength}
+          setCharacterLength={setCharacterLength}
+          setOptions={setOptions}
+        />
         <Button
-          isDisabled={
-            !options.lowerCase &&
-            !options.upperCase &&
-            !options.numbers &&
-            !options.symbols
-          }
+          isDisabled={measureStrength(characterLength, options) === 0}
           onClick={() =>
             setGeneratedPassword(
               generatePassword(Math.floor(characterLength / 5), options)

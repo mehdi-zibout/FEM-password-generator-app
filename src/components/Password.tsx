@@ -10,11 +10,11 @@ function Password({
   setShowCopied: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   return (
-    <Container className='flex justify-between items-center my-[1.5rem] '>
+    <Container className='flex justify-between items-center my-[1.5rem] md:w-[33.75rem]  w-[21.43rem] px-[1rem] py-[1rem] md:py-[1.18rem] md:px-[2rem] '>
       <div
-        className={`text-[2rem] leading-[2.7rem]  ${
+        className={` md:text-[2rem] text-[1.5rem] leading-[1.99rem] md:leading-[2.7rem]  ${
           password ? '' : 'opacity-25'
-        }`}
+        }   overflow-ellipsis w-[77%] overflow-hidden`}
       >
         {password || 'P4$5W0rD!'}
       </div>

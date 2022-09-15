@@ -11,7 +11,6 @@ export const Range = styled.input.attrs({ type: 'range' })`
           #18171F ${props.value}%,
            #18171F 100% )`};
   height: 0.5rem;
-  width: 29.75rem;
   ::-webkit-slide-thumb {
     -webkit-appearance: none;
     width: 1.75rem;
@@ -44,7 +43,7 @@ export const Range = styled.input.attrs({ type: 'range' })`
 
 export const Container = styled.div`
   background-color: #24232c;
-  width: 33.75rem;
-  padding: 1.18rem 2rem;
+  /* width: 33.75rem; */
+  /* padding: 1.18rem 2rem; */
   color: #e6e5ea;
 `;

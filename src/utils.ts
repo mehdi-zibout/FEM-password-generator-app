@@ -1,16 +1,18 @@
-export function getUpper(): string {
+import { StrengthType } from './components/Strength';
+
+function getUpper(): string {
   return String.fromCharCode(Math.floor(Math.random() * 26 + 65));
 }
 
-export function getLower(): string {
+function getLower(): string {
   return String.fromCharCode(Math.floor(Math.random() * 26 + 97));
 }
 
-export function getNumber(): string {
+function getNumber(): string {
   return Math.floor(Math.random() * 10).toString();
 }
 
-export function getSymbol(): string {
+function getSymbol(): string {
   const randomSymbs = [
     String.fromCharCode(Math.floor(Math.random() * 15 + 33)),
     String.fromCharCode(Math.floor(Math.random() * 7 + 58)),
@@ -61,4 +63,35 @@ export default function generatePassword(
     password.splice(random, 1);
   }
   return passwordTheWord;
+}
+
+export function measureStrength(
+  length: number,
+  {
+    upperCase,
+    lowerCase,
+    numbers,
+    symbols,
+  }: {
+    upperCase: boolean;
+    lowerCase: boolean;
+    numbers: boolean;
+    symbols: boolean;
+  }
+): StrengthType {
+  const numberOfChecked = (+upperCase +
+    +lowerCase +
+    +numbers +
+    +symbols) as StrengthType;
+  if (length <= 0 || numberOfChecked === 0) return 0;
+  if (length < 8) return 1;
+  if (length < 12 && numberOfChecked <= 2) return 2;
+  if (
+    (length < 12 && numberOfChecked > 2) ||
+    (length >= 12 && numberOfChecked <= 2)
+  )
+    return 3;
+  if (length >= 12 && numberOfChecked > 2) return 4;
+  // I think I cover all cases idk why typescript is complaining anyways
+  return 0;
 }
