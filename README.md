@@ -1,6 +1,6 @@
 # Frontend Mentor - Password generator app solution
 
-This is a solution to the [Password generator app challenge on Frontend Mentor](https://www.frontendmentor.io/challenges/password-generator-app-Mr8CLycqjh). Frontend Mentor challenges help you improve your coding skills by building realistic projects. 
+This is a solution to the [Password generator app challenge on Frontend Mentor](https://www.frontendmentor.io/challenges/password-generator-app-Mr8CLycqjh). Frontend Mentor challenges help you improve your coding skills by building realistic projects.
 
 ## Table of contents
 
@@ -14,7 +14,6 @@ This is a solution to the [Password generator app challenge on Frontend Mentor](
   - [Continued development](#continued-development)
   - [Useful resources](#useful-resources)
 - [Author](#author)
-- [Acknowledgments](#acknowledgments)
 
 **Note: Delete this note and update the table of contents based on what sections you keep.**
 
@@ -32,80 +31,114 @@ Users should be able to:
 
 ### Screenshot
 
-![](./screenshot.jpg)
-
-Add a screenshot of your solution. The easiest way to do this is to use Firefox to view your project, right-click the page and select "Take a Screenshot". You can choose either a full-height screenshot or a cropped one based on how long the page is. If it's very long, it might be best to crop it.
-
-Alternatively, you can use a tool like [FireShot](https://getfireshot.com/) to take the screenshot. FireShot has a free option, so you don't need to purchase it. 
-
-Then crop/optimize/edit your image however you like, add it to your project, and update the file path in the image above.
-
-**Note: Delete this note and the paragraphs above when you add your screenshot. If you prefer not to add a screenshot, feel free to remove this entire section.**
+![Screenshot of the app](./screenshot.png)
 
 ### Links
 
-- Solution URL: [Add solution URL here](https://your-solution-url.com)
-- Live Site URL: [Add live site URL here](https://your-live-site-url.com)
+<!-- - Solution URL: [Add solution URL here](https://your-solution-url.com) -->
+
+- Live Site URL: [Github Pages](https://mehdi-zibout.github.io/FEM-password-generator-app/)
 
 ## My process
 
 ### Built with
+
 - [React](https://reactjs.org/) - JS library
 - [Vite](https://nextjs.org/) - React framework
-- [Styled Components](https://styled-components.com/) - For styles
-- [Styled Components](https://styled-components.com/) - For styles
+- [Tailwindcss](https://tailwindcss.com/) - For styles
+- [Styled Components](https://styled-components.com/) - I used it particulary to style the input rage
 - Flexbox
-
-
-**Note: These are just examples. Delete this note and replace the list above with your own choices**
 
 ### What I learned
 
-Use this section to recap over some of your major learnings while working through this project. Writing these out and providing code samples of areas you want to highlight is a great way to reinforce your own knowledge.
+I keep hearing about why `Create React App` is bad a no one should be using it, I looked for alternatives and I opted for `Vite` for this challenge.
+Most of the difficulties I faced stemmed from styling the `html inputs`, I found a simple way to style the `input range` but for the `checkbox` I ended up creating a component for it.
+I also learnt how to implement `copy to the clipboard feature` and I found that it's just a simpl one line of code
 
-To see how you can add code snippets, see below:
-
-```html
-<h1>Some HTML code I'm proud of</h1>
+```tsx
+navigator.clipboard.writeText('the thing to be copied').then(() => {
+  // what to do after
+});
 ```
-```css
-.proud-of-this-css {
-  color: papayawhip;
+
+Finally thinking about how to generate the password, I learnt about a `String` method `fromCharCode` that takes a decimal and returns the unicode character associated with it. So I used it along `Math.random()` to generate the passwords
+
+```tsx
+function getUpper(): string {
+  return String.fromCharCode(Math.floor(Math.random() * 26 + 65));
+}
+
+function getLower(): string {
+  return String.fromCharCode(Math.floor(Math.random() * 26 + 97));
+}
+
+function getNumber(): string {
+  return Math.floor(Math.random() * 10).toString();
+}
+
+function getSymbol(): string {
+  const randomSymbs = [
+    String.fromCharCode(Math.floor(Math.random() * 15 + 33)),
+    String.fromCharCode(Math.floor(Math.random() * 7 + 58)),
+    String.fromCharCode(Math.floor(Math.random() * 6 + 91)),
+    String.fromCharCode(Math.floor(Math.random() * 4 + 123)),
+  ];
+  return randomSymbs[Math.floor(Math.random() * 4)][0];
+}
+
+export default function generatePassword(
+  length: number,
+  {
+    upperCase,
+    lowerCase,
+    numbers,
+    symbols,
+  }: {
+    upperCase: boolean;
+    lowerCase: boolean;
+    numbers: boolean;
+    symbols: boolean;
+  }
+): string {
+  let password: string[] = [];
+  // getting at least one upper one lower one number one symbol if requested
+  if (upperCase && password.length < length) password.push(getUpper());
+  if (lowerCase && password.length < length) password.push(getLower());
+  if (numbers && password.length < length) password.push(getNumber());
+  if (symbols && password.length < length) password.push(getSymbol());
+  // filling the rest
+  while (password.length < length) {
+    let x = Math.random();
+    if (x < 0.35) {
+      if (lowerCase && password.length < length) password.push(getLower());
+    } else if (x < 0.65) {
+      if (upperCase && password.length < length) password.push(getUpper());
+    } else if (x < 0.85) {
+      if (numbers && password.length < length) password.push(getNumber());
+    } else if (symbols && password.length < length) {
+      password.push(getSymbol());
+    }
+  }
+  // rearreanging the password
+  let passwordTheWord = '';
+  while (password.length > 0) {
+    const random = Math.floor(Math.random() * password.length);
+    passwordTheWord = passwordTheWord.concat(password[random]);
+    password.splice(random, 1);
+  }
+  return passwordTheWord;
 }
 ```
-```js
-const proudOfThisFunc = () => {
-  console.log('🎉')
-}
-```
-
-If you want more help with writing markdown, we'd recommend checking out [The Markdown Guide](https://www.markdownguide.org/) to learn more.
-
-**Note: Delete this note and the content within this section and replace with your own learnings.**
 
 ### Continued development
 
-Use this section to outline areas that you want to continue focusing on in future projects. These could be concepts you're still not completely comfortable with or techniques you found useful that you want to refine and perfect.
-
-**Note: Delete this note and the content within this section and replace with your own plans for continued development.**
+I think I'm quite familiar with using `tailwindcss`, and it's becoming kinda of second nature to me. But I still waste a lot of time copying a color/size and using it with tailwind. I think I need to learn how to customize the config and hardcord the color/sizes from the start and then when I want to use them I'll just have to use `text-primary` instead of `text-[#14131B]`
 
 ### Useful resources
 
-- [Example resource 1](https://www.example.com) - This helped me for XYZ reason. I really liked this pattern and will use it going forward.
-- [Example resource 2](https://www.example.com) - This is an amazing article which helped me finally understand XYZ. I'd recommend it to anyone still learning this concept.
-
-**Note: Delete this note and replace the list above with resources that helped you during the challenge. These could come in handy for anyone viewing your solution or for yourself when you look back on this project in the future.**
+- [Styling the input range](https://www.youtube.com/watch?v=99rxURmD59E) - Starting this project, I had no idea how to style the `input rage`, and google didn't help with that as well, most of the solutions were huge wall of css with bunch of unknown properties to me. thankfuly I found this video which used `styled components` to simplify the process
 
 ## Author
 
-- Website - [Add your name here](https://www.your-site.com)
-- Frontend Mentor - [@yourusername](https://www.frontendmentor.io/profile/yourusername)
-- Twitter - [@yourusername](https://www.twitter.com/yourusername)
-
-**Note: Delete this note and add/remove/edit lines above based on what links you'd like to share.**
-
-## Acknowledgments
-
-This is where you can give a hat tip to anyone who helped you out on this project. Perhaps you worked in a team or got some inspiration from someone else's solution. This is the perfect place to give them some credit.
-
-**Note: Delete this note and edit this section's content as necessary. If you completed this challenge by yourself, feel free to delete this section entirely.**
+- Website - [Mehdi Zibout](https://www.zryqv.com)
+- Frontend Mentor - [@mehdizibout](https://www.frontendmentor.io/profile/yourusername)
