@@ -140,4 +140,4 @@ I think I'm quite familiar with using `tailwindcss`, and it's becoming kinda of 
 ## Author
 
 - Website - [Mehdi Zibout](https://www.zryqv.com)
-- Frontend Mentor - [@mehdizibout](https://www.frontendmentor.io/profile/yourusername)
+- Frontend Mentor - [@mehdizibout](https://www.frontendmentor.io/profile/mehdi-zibout)
